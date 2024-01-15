@@ -1,6 +1,6 @@
-const Student = require('../models/Student');
-const Class = require('../models/Class');
-const successObj = require('../responses/successObj');
+const Student = require("../models/Student");
+const Class = require("../models/Class");
+const resObj = require("../responses/resObj");
 
 exports.getAllStudents = async (req, res) => {
   try {
@@ -8,12 +8,9 @@ exports.getAllStudents = async (req, res) => {
 
     const students = await Student.find({ class: classId });
 
-    successObj(res, 200, students);
+    return resObj.success(res, 200, students);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -34,12 +31,9 @@ exports.createStudent = async (req, res) => {
       { new: true }
     );
 
-    successObj(res, 201, createdStudent);
+    return resObj.success(res, 201, createdStudent);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -54,17 +48,14 @@ exports.getStudent = async (req, res) => {
 
     if (!foundStudent) {
       return res.status(404).json({
-        status: 'fail',
-        message: '#! Student not found, Invalid ID',
+        status: "fail",
+        message: "#! Student not found, Invalid ID",
       });
     }
 
-    successObj(res, 200, foundStudent);
+    return resObj.success(res, 200, foundStudent);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -81,17 +72,14 @@ exports.updateStudent = async (req, res) => {
 
     if (!updatedStudent) {
       return res.status(404).json({
-        status: 'fail',
-        message: '#! Student not found, Invalid ID',
+        status: "fail",
+        message: "#! Student not found, Invalid ID",
       });
     }
 
-    successObj(res, 200, updatedStudent);
+    return resObj.success(res, 200, updatedStudent);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -105,10 +93,7 @@ exports.deleteStudent = async (req, res) => {
     });
 
     if (!deletedStudent) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Student not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Student not found, Invalid ID");
     }
 
     const updatedClass = await Class.findByIdAndUpdate(
@@ -117,11 +102,8 @@ exports.deleteStudent = async (req, res) => {
       { new: true }
     );
 
-    successObj(res, 200, deletedStudent);
+    return resObj.success(res, 200, deletedStudent);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };

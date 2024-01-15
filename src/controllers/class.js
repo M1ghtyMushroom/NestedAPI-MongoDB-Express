@@ -1,27 +1,15 @@
-const Class = require('../models/Class');
-const Group = require('../models/Group');
-const successObj = require('../responses/successObj');
+const Class = require("../models/Class");
+const Group = require("../models/Group");
+const resObj = require("../responses/resObj");
 
 exports.getAllClasses = async (req, res) => {
   try {
     const { groupId } = req.params;
 
-    const classes = await Class.find({ group: groupId }, 'name time');
-    successObj(res, 200, classes);
-    /*
-    res.status(200).json({
-      status: 'success',
-      results: classes.length,
-      data: {
-        classes,
-      },
-    });
-    */
+    const classes = await Class.find({ group: groupId }, "name time");
+    return resObj.success(res, 200, classes);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -31,10 +19,7 @@ exports.createClass = async (req, res) => {
     const { name, time } = req.body;
 
     if (!name || !time) {
-      return res.status(400).json({
-        status: 'fail',
-        message: '#! Name and time are required for creating a class',
-      });
+      return resObj.fail(res, 400, "#! Name & time are required for creating a class");
     }
 
     const createdClass = await Class.create({
@@ -50,17 +35,11 @@ exports.createClass = async (req, res) => {
     );
 
     if (!updatedGroup) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Group not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Group not found, Invalid ID");
     }
-    successObj(res, 201, { createdClass, updatedGroup });
+    return resObj.success(res, 201, { createdClass, updatedGroup });
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -74,18 +53,12 @@ exports.getClass = async (req, res) => {
     });
 
     if (!foundClass) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Class not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Class not found, Invalid ID");
     }
 
-    successObj(res, 200, foundClass);
+    return resObj.success(res, 200, foundClass);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -101,18 +74,12 @@ exports.updateClass = async (req, res) => {
     );
 
     if (!updatedClass) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Class not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Class not found, Invalid ID");
     }
 
-    successObj(res, 200, updatedClass);
+    return resObj.success(res, 200, updatedClass);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -125,14 +92,10 @@ exports.deleteClass = async (req, res) => {
         _id: classId,
         group: groupId,
       },
-      { new: true }
     );
 
     if (!deletedClass) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Class not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Class not found, Invalid ID");
     }
 
     const updatedGroup = await Group.findByIdAndUpdate(
@@ -141,11 +104,8 @@ exports.deleteClass = async (req, res) => {
       { new: true }
     );
 
-    successObj(res, 200, deletedClass);
+    return resObj.success(res, 200, deletedClass);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };

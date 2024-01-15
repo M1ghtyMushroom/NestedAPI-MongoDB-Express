@@ -1,15 +1,12 @@
-const Group = require('../models/Group');
-const successObj = require('../responses/successObj');
+const Group = require("../models/Group");
+const resObj = require("../responses/resObj");
 
 exports.getAllGroups = async (req, res) => {
   try {
     const groups = await Group.find();
-    successObj(res, 200, groups);
+    return resObj.success(res, 200, groups);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -17,12 +14,9 @@ exports.createGroup = async (req, res) => {
   try {
     const { name } = req.body;
     const createdGroup = await Group.create({ name });
-    successObj(res, 201, createdGroup);
+    return resObj.success(res, 201, createdGroup);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -32,18 +26,12 @@ exports.getGroup = async (req, res) => {
     const group = await Group.findById(groupId);
 
     if (!group) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Group not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Group not found, Invalid ID");
     }
 
-    successObj(res, 200, group);
+    return resObj.success(res, 200, group);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -53,10 +41,11 @@ exports.updateGroup = async (req, res) => {
     const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({
-        status: 'fail',
-        message: '#! Name is required for updating the group',
-      });
+      return resObj.fail(
+        res,
+        400,
+        "#! Name is required for updating the group"
+      );
     }
 
     const updatedGroup = await Group.findByIdAndUpdate(
@@ -66,17 +55,11 @@ exports.updateGroup = async (req, res) => {
     );
 
     if (!updatedGroup) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Group not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Group not found, Invalid ID");
     }
-    successObj(res, 200, updatedGroup);
+    return resObj.success(res, 200, updatedGroup);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
 
@@ -87,17 +70,11 @@ exports.deleteGroup = async (req, res) => {
     const deletedGroup = await Group.findByIdAndDelete(groupId);
 
     if (!deletedGroup) {
-      return res.status(404).json({
-        status: 'fail',
-        message: '#! Group not found, Invalid ID',
-      });
+      return resObj.fail(res, 404, "#! Group not found, Invalid ID");
     }
 
-    successObj(res, 200, deletedGroup);
+    return resObj.success(res, 200, deletedGroup);
   } catch (err) {
-    res.status(500).json({
-      status: 'error',
-      message: err.message,
-    });
+    return resObj.error(res, 500, err);
   }
 };
