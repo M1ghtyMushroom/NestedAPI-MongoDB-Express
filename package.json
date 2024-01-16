@@ -1,7 +1,7 @@
 {
-  "name": "tlo-api",
+  "name": "nestedapi-mongodb-express",
   "version": "1.0.0",
-  "description": "teacher lessons organizer API",
+  "description": "NestedAPI-MongoDB-Express",
   "main": "server.js",
   "scripts": {
     "start": "nodemon src/server.js"
