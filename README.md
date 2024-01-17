@@ -14,7 +14,7 @@ This repository showcases a nested API implementation using MongoDB and Express.
 
 1. Clone the repository
 2. Install dependencies with `npm install`
-3. Set up your MongoDB connection in the `config.env` file
+3. Set up your MongoDB connection in the `config.env` file like so: `DB=your_mongodb_uri`
 4. Run the application with `npm start`
 
 Feel free to explore the code and use it as a foundation for your own projects.
